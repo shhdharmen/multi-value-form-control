@@ -1,5 +1,12 @@
 import { Directive, ElementRef, HostListener, Renderer2 } from "@angular/core";
-import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
+import {
+  AbstractControl,
+  ControlValueAccessor,
+  NG_VALIDATORS,
+  NG_VALUE_ACCESSOR,
+  ValidationErrors,
+  Validator,
+} from "@angular/forms";
 
 @Directive({
   selector: "input[type=tel]",
@@ -9,9 +16,14 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
       useExisting: InputTelDirective,
       multi: true,
     },
+    {
+      provide: NG_VALIDATORS,
+      useExisting: InputTelDirective,
+      multi: true,
+    },
   ],
 })
-export class InputTelDirective implements ControlValueAccessor {
+export class InputTelDirective implements ControlValueAccessor, Validator {
   constructor(
     private _elementRef: ElementRef<HTMLInputElement>,
     private _renderer: Renderer2
@@ -28,6 +40,7 @@ export class InputTelDirective implements ControlValueAccessor {
       telephone.toString()
     );
   }
+
   registerOnChange(fn: any): void {
     this.onInput = (value: string) => {
       let telephoneValues = value.split("-");
@@ -38,7 +51,15 @@ export class InputTelDirective implements ControlValueAccessor {
       fn(telephone);
     };
   }
+
   registerOnTouched(fn: any): void {}
+
+  validate(control: AbstractControl): ValidationErrors | null {
+    const telephone = control.value as Telephone;
+    return telephone && telephone.countryCode && telephone.phoneNumber
+      ? null
+      : { telephone: true };
+  }
 }
 
 export class Telephone {

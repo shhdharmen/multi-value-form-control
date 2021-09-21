@@ -15,7 +15,16 @@ import { Telephone } from "./shared/directives/input-tel.directive";
             [formControl]="telephone"
             class="form-control"
             autocomplete="off"
+            [class.is-invalid]="
+              (telephone?.touched || telephone?.dirty) && telephone?.invalid
+            "
           />
+          <div
+            class="invalid-feedback d-block"
+            *ngIf="(telephone.touched || telephone.dirty) && telephone.invalid"
+          >
+            Invalid Telephone
+          </div>
         </div>
         <code class="d-block bg-dark p-2 rounded text-light">{{
           telephone.value | json
@@ -25,5 +34,5 @@ import { Telephone } from "./shared/directives/input-tel.directive";
   `,
 })
 export class AppComponent {
-  telephone = new FormControl(new Telephone("+91", "1234567890"));
+  telephone = new FormControl(new Telephone("", ""));
 }
