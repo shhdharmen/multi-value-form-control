@@ -56,9 +56,7 @@ export class InputTelDirective implements ControlValueAccessor, Validator {
 
   validate(control: AbstractControl): ValidationErrors | null {
     const telephone = control.value as Telephone;
-    return telephone && telephone.countryCode && telephone.phoneNumber
-      ? null
-      : { telephone: true };
+    return telephone.isValid() ? null : { telephone: true };
   }
 }
 
@@ -68,5 +66,8 @@ export class Telephone {
     return this.countryCode && this.phoneNumber
       ? `${this.countryCode}-${this.phoneNumber}`
       : "";
+  }
+  isValid() {
+    return !!(this.countryCode && this.phoneNumber);
   }
 }
