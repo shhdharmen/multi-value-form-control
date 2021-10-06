@@ -1,4 +1,4 @@
-# How to manage objects in Angular FormControl
+# [How to manage objects in Angular FormControl](https://indepth.dev/tutorials/angular/object-in-formcontrol)
 
 ## In this tutorial, we will learn how to manage objects in FormControl and store complex values in it
 
